@@ -1,35 +1,60 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { useEffect, useState } from 'react';
+import { createClient } from '@supabase/supabase-js';
 import './App.css'
 
+const supabase = createClient(
+  import.meta.env.VITE_SUPABASE_URL,
+  import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY
+);
+
 function App() {
-  const [count, setCount] = useState(0)
+  const [animals, setAnimals] = useState([]);
+
+  useEffect(() => {
+    getAnimals();
+  }, []);
+
+  const getAnimals = async () => {
+    try {
+      console.log('fetching animals from supabase');
+      const { data } = await supabase.from('animals').select();
+      setAnimals(data);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  // Ya in the App.css would be better and there should be better use of clases so it isn't repeated as much in td/th
+  const tableStyle = {
+    textAlign: 'left',
+    padding: '8px'
+  }
 
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <p>An example that fetches some data from supabase</p>
+      <table>
+        <thead>
+          <tr>
+            <th style={tableStyle}>Name</th>
+            <th style={tableStyle}>Genus</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            {animals.map(animal => (
+              <td key={animal.id} style={tableStyle}>{animal.name}</td>
+            ))}
+          </tr>
+          <tr>
+            {animals.map(animal => (
+              <td key={animal.id} style={tableStyle}>{animal.genus}</td>
+            ))}
+          </tr>
+        </tbody>
+      </table>
     </>
-  )
+  );
 }
 
 export default App
