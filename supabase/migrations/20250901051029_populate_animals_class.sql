@@ -1,0 +1,1 @@
+UPDATE public.animals SET class = 'Mammal' WHERE id in (1, 2, 3);

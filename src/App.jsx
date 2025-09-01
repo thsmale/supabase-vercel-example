@@ -38,19 +38,17 @@ function App() {
           <tr>
             <th style={tableStyle}>Name</th>
             <th style={tableStyle}>Genus</th>
+            <th style={tableStyle}>Class</th>
           </tr>
         </thead>
         <tbody>
-          <tr>
-            {animals.map(animal => (
-              <td key={animal.id} style={tableStyle}>{animal.name}</td>
-            ))}
-          </tr>
-          <tr>
-            {animals.map(animal => (
-              <td key={animal.id} style={tableStyle}>{animal.genus}</td>
-            ))}
-          </tr>
+          {animals.map(animal => (
+            <tr key={animal.id}>
+              <td style={tableStyle}>{animal.name}</td>
+              <td style={tableStyle}>{animal.genus}</td>
+              <td style={tableStyle}>{animal.class}</td>
+            </tr>
+          ))}
         </tbody>
       </table>
     </>
